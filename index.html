@@ -7,11 +7,11 @@
     <title>Welcome to pytest_mpdist’s documentation! &#8212; pytest_mpdist  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Developer Guide" href="developer-guide.html" />
@@ -78,11 +78,11 @@ same process/thread.  To do this, annotate each test using a unique name for the
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pytest_mproc</span>
 <span class="n">TEST_GROUP1</span> <span class="o">=</span> <span class="s2">&quot;group1&quot;</span>
 
-<span class="nd">@pytest_mproc</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="n">TEST_GROUP1</span><span class="p">)</span>
+<span class="nd">@pytest_mproc.group</span><span class="p">(</span><span class="n">TEST_GROUP1</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">test_something1</span><span class="p">():</span>
      <span class="k">pass</span>
 
-<span class="nd">@pytest_mproc</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="n">TEST_GROUP1</span><span class="p">)</span>
+<span class="nd">@pytest_mproc.group</span><span class="p">(</span><span class="n">TEST_GROUP1</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">test_something2</span><span class="p">():</span>
      <span class="k">pass</span>
 </pre></div>
@@ -92,7 +92,7 @@ same process/thread.  To do this, annotate each test using a unique name for the
 
 <span class="n">TEST_GROUP_CLASSS</span> <span class="o">=</span> <span class="s2">&quot;class_group&quot;</span>
 
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">mproc</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="n">TEST_GROUP_CLASS</span><span class="p">)</span>
+<span class="nd">@pytest.mproc.group</span><span class="p">(</span><span class="n">TEST_GROUP_CLASS</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">TestClass</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">test_method1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
        <span class="k">pass</span>
@@ -102,7 +102,27 @@ same process/thread.  To do this, annotate each test using a unique name for the
 </pre></div>
 </div>
 <p>This is useful if the tests are using a common resource for testing and parallelized execution of tests might
-result in intereference.</p>
+result in interference.</p>
+</div>
+<div class="section" id="global-initializers-finalizers">
+<h1>Global Initializers/Finalizers<a class="headerlink" href="#global-initializers-finalizers" title="Permalink to this headline">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Much like pytest-xdist, session level variables are called once for EACH THREAD.  So if you run on 4 cores, each
+session-scoped fixture will run 4 times.  This is because forking is used to parallelize tests.</p>
+</div>
+<p>To add an initializer and finalzier to be called only once before all tests execute and after all tests executed,
+respectively, use fixture from the pytest_mproc_utils package:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pytest_mproc</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">pytest_mproc_global_initializer</span><span class="p">,</span> <span class="n">pytest_mproc_global_finalizer</span>
+<span class="nd">@pytest_mproc_global_initializer</span>
+<span class="k">def</span> <span class="nf">initualizer</span><span class="p">():</span>
+    <span class="k">pass</span>
+
+<span class="nd">@pytest_mproc_global_finalizer</span>
+<span class="k">def</span> <span class="nf">finalizer</span><span class="p">():</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
 </div>
 
 
@@ -144,7 +164,7 @@ result in intereference.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 
 
 
@@ -161,7 +181,7 @@ result in intereference.</p>
       &copy;2020, John Rusnak.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.3.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
